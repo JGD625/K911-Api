@@ -1,0 +1,1 @@
+DROP TABLE IF EXISTS k911_dogs;
