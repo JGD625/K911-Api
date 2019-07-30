@@ -4,9 +4,10 @@ const morgan = require('morgan')
 const cors = require('cors')
 const helmet = require('helmet')
 const { NODE_ENV } = require('./config')
-const medicineRouter = require('./medicine/medicine-router')
-const foodsRouter = require('./foods/foods-router')
 const plantsRouter = require('./plants/plants-router')
+const foodsRouter = require('./foods/foods-router')
+const medicineRouter = require('./medicine/medicine-router')
+
 
 const app = express()
 
@@ -18,9 +19,9 @@ app.use(morgan(morganOption))
 app.use(cors())
 app.use(helmet())
 
+app.use('/api/plants', plantsRouter)
+app.use('/api/medicine', medicineRouter)
 app.use('/api/foods', foodsRouter)
-app.use('api/plants', plantsRouter)
-app.use('api/medicine', medicineRouter)
 
 app.get('/', (req, res) => {
        res.send('Hello, world!')

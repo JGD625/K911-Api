@@ -1,37 +1,15 @@
-const xss = require('xss')
-
 const FoodsService = {
-  getAllFoods(db) {
-    return db
-      .from('k911_foods AS food')
-      .select(
-        'food.id',
-        'food.name',
-        'food.toxicity',
-        'food.toxic',
-        'food.toxic_principles',
-        'food.symptoms'
-      )
+  getAllFoods(knex) {
+    return knex
+      .select('*')
+      .from('k911_foods')
   },
-
-
-
-  getById(db, id) {
-    return ArticlesService.getAllArticles(db)
-      .where('food.id', id)
-      .first()
-  },
-
-
-  serializeFoods(food) {
-    return {
-      id: food.id,
-      toxicity: food.toxicity,
-      toxic: food.toxic,
-      toxic_principles: food.toxic_principles,
-      name: food.name,
-      symptoms: food.symptoms,
-    }
+  getById(knex, id) {
+    return knex
+     .from('k911_foods')
+     .select('*')
+     .where('id', id)
+     .first()
   },
 }
 

@@ -2,43 +2,42 @@ const express = require('express')
 const PlantsService = require('./plants-service')
 const plantsRouter = express.Router()
 
+
+
+const serializePlant = plant => ({
+  id: plant.id,
+  name: plant.name,
+  toxic: plant.toxic,
+  toxicity: plant.toxicity,
+  symptom: plant.symptom,
+  toxic_principles: plant.toxic_principles
+})
+
 plantsRouter
   .route('/')
-  .get((req, res, next) => {
+  .get((req, res) => {
     PlantsService.getAllPlants(req.app.get('db'))
       .then(plants => {
-        res.json(plants.map(PlantsService.serializePlant))
+        res.json(plants.map(serializePlant))
       })
-      .catch(next)
   })
 
 plantsRouter
   .route('/:plant_id')
-  .all(checkPlantExists)
-  .get((req, res) => {
-    res.json(PlantsService.serializePlant(res.plant))
+  .get((req, res, ) => {
+    const { plant_id } = req.params
+    PlantsService.getById(req.app.get('db'), plant_id)
+      .then(plant => {
+        if (!plant) {
+          return res.status(404).json({
+            error: { message: `Plant Not Found` }
+          })
+        }
+        res.json(serializePlant(plant))
+      })
   })
 
 
 
-/* async/await syntax for promises */
-async function checkPlantExists(req, res, next) {
-  try {
-    const plant = await PlantsService.getById(
-      req.app.get('db'),
-      req.params.plant_id
-    )
-
-    if (!plant)
-      return res.status(404).json({
-        error: `Plant doesn't exist`
-      })
-
-    res.plant = plant
-    next()
-  } catch (error) {
-    next(error)
-  }
-}
 
 module.exports = plantsRouter

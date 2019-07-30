@@ -2,43 +2,42 @@ const express = require('express')
 const FoodsService = require('./foods-service')
 const foodsRouter = express.Router()
 
+
+
+const serializeFood = food => ({
+  id: food.id,
+  name: food.name,
+  toxic: food.toxic,
+  toxicity: food.toxicity,
+  symptom: food.symptom,
+  toxic_principles: food.toxic_principles
+})
+
 foodsRouter
   .route('/')
-  .get((req, res, next) => {
+  .get((req, res) => {
     FoodsService.getAllFoods(req.app.get('db'))
       .then(foods => {
-        res.json(foods.map(FoodsService.serializeFood))
+        res.json(foods.map(serializeFood))
       })
-      .catch(next)
   })
 
 foodsRouter
-  .route('/:foods_id')
-  .all(checkFoodExists)
-  .get((req, res) => {
-    res.json(FoodsService.serializeFood(res.food))
+  .route('/:food_id')
+  .get((req, res, ) => {
+    const { food_id } = req.params
+    FoodsService.getById(req.app.get('db'), food_id)
+      .then(food => {
+        if (!food) {
+          return res.status(404).json({
+            error: { message: `Food Not Found` }
+          })
+        }
+        res.json(serializeFood(food))
+      })
   })
 
 
 
-/* async/await syntax for promises */
-async function checkFoodExists(req, res, next) {
-  try {
-    const food = await FoodsService.getById(
-      req.app.get('db'),
-      req.params.food_id
-    )
-
-    if (!food)
-      return res.status(404).json({
-        error: `Food doesn't exist`
-      })
-
-    res.food = food
-    next()
-  } catch (error) {
-    next(error)
-  }
-}
 
 module.exports = foodsRouter

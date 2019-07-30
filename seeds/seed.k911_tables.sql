@@ -81,7 +81,7 @@ VALUES
   ('Eggs', 'Non-Toxic', false, '',
     ''),
   ('Fennel', 'Non-Toxic', false, '',
-    '')
+    ''),
   ('Honeydew Melon', 'Non-Toxic', false, '',
     ''),
   ('Honey', 'Non-Toxic', false, '',
@@ -299,7 +299,7 @@ VALUES
 ('Yorba Linda', 'Non-Toxic', false, '',
   ''),
 ('Zinnia', 'Non-Toxic', false, '',
-  ''),
+  '')
 ;
 
 INSERT INTO K911_medicine (name, toxicity, toxic, brands, symptom)
@@ -317,7 +317,7 @@ VALUES
   ('Loperamide', 'Non-Toxic', false, 'Imodium',
     'While generally safe, some breeds related to Collies may have adverse reactions to Imodium. Do not give this medicine to Collies, Shelties, Australian Shepherds and Long-haired Whippets.'),
   ('Antibiotic Ointments & Other Topical Creams', 'Non-Toxic', false, 'Neosporin, Hydrocortisone',
-    ''),
+    '')
 ;
 
 COMMIT;
